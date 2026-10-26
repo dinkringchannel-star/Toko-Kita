@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="id">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Toko Saya — Penjualan</title>
+  <style>
+    :root {
+      --blue: #155eef;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #e4e7ec;
+      --bg: #f7f9fc;
+      --green: #067647;
+      --red: #b42318
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      font: 15px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background: var(--bg);
+      color: var(--ink)
+    }
+
+    header {
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 5
+    }
+
+    .bar {
+      max-width: 1200px;
+      margin: auto;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px
+    }
+
+    .brand {
+      font-size: 20px;
+      font-weight: 800
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      background: var(--blue);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer
+    }
+
+    .btn.secondary {
+      background: #eef2ff;
+      color: #243b80
+    }
+
+    .btn.danger {
+      background: #b42318
+    }
+
+    .btn:disabled {
+      opacity: .45;
+      cursor: not-allowed
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px 11px;
+      border: 1px solid #d0d5dd;
+      border-radius: 9px;
+      font: inherit;
+      background: #fff
+    }
+
+    label {
+      display: block;
+      font-weight: 650;
+      font-size: 13px;
+      margin: 10px 0 5px
+    }
+
+    .wrap {
+      max-width: 1200px;
+      margin: 24px auto;
+      padding: 0 20px
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 18px
+    }
+
+    .toolbar input {
+      max-width: 430px
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 340px;
+      gap: 20px;
+      align-items: start
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 15px
+    }
+
+    .card,
+    .panel {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      overflow: hidden
+    }
+
+    .product-img {
+      height: 160px;
+      background: #f2f4f7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #98a2b3
+    }
+
+    .product-img img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      background: #f2f4f7;
+    }
+
+
+    .pbody {
+      padding: 13px
+    }
+
+    .pname {
+      font-weight: 750;
+      min-height: 45px
+    }
+
+    .price {
+      font-size: 18px;
+      font-weight: 800;
+      margin: 6px 0
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 13px
+    }
+
+    .panel {
+      padding: 16px
+    }
+
+    .panel h2,
+    .panel h3 {
+      margin: 0 0 12px
+    }
+
+    .cartrow {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line)
+    }
+
+    .qty {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 6px
+    }
+
+    .qty button {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 7px;
+      width: 28px;
+      height: 28px;
+      cursor: pointer
+    }
+
+    .total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 18px;
+      font-weight: 800;
+      padding: 15px 0
+    }
+
+    .hidden {
+      display: none !important
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 15px;
+      flex-wrap: wrap
+    }
+
+    .tab {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 9px;
+      padding: 9px 13px;
+      cursor: pointer
+    }
+
+    .tab.active {
+      background: #eaf0ff;
+      border-color: #a8bcff;
+      color: #1746a2
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px
+    }
+
+    .full {
+      grid-column: 1/-1
+    }
+
+    .status {
+      padding: 3px 8px;
+      border-radius: 20px;
+      background: #f2f4f7;
+      font-size: 12px
+    }
+
+    .status.ok {
+      background: #dcfae6;
+      color: #067647
+    }
+
+    .status.bad {
+      background: #fee4e2;
+      color: #b42318
+    }
+
+    .tablewrap {
+      overflow: auto
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 13px
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 10px;
+      border-bottom: 1px solid var(--line);
+      white-space: nowrap
+    }
+
+    th {
+      background: #f9fafb
+    }
+
+    .notice {
+      padding: 12px;
+      border-radius: 10px;
+      background: #eff8ff;
+      color: #175cd3;
+      margin: 10px 0;
+      font-size: 13px
+    }
+
+    .error {
+      color: var(--red);
+      font-size: 13px;
+      margin-top: 8px
+    }
+
+    .success {
+      color: var(--green);
+      font-size: 13px;
+      margin-top: 8px
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: #10182899;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      z-index: 10
+    }
+
+    .modalbox {
+      background: #fff;
+      border-radius: 16px;
+      padding: 22px;
+      max-width: 480px;
+      width: 100%;
+      max-height: 90vh;
+      overflow: auto
+    }
+
+    .qris-img {
+      width: 220px;
+      height: 220px;
+      object-fit: contain;
+      border: 1px solid var(--line);
+      display: block;
+      margin: 12px auto
+    }
+
+    .footer {
+      padding: 30px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px
+    }
+
+    @media(max-width:800px) {
+      .layout {
+        grid-template-columns: 1fr
+      }
+
+      .admin-grid {
+        grid-template-columns: 1fr
+      }
+
+      .full {
+        grid-column: auto
+      }
+
+      .bar {
+        padding: 12px 14px
+      }
+
+      .wrap {
+        padding: 0 14px;
+        margin: 16px auto
+      }
+
+      .toolbar {
+        align-items: stretch;
+        flex-direction: column
+      }
+
+      .toolbar input {
+        max-width: none
+      }
+
+      .products {
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+      }
+
+      .product-img {
+        height: 130px
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="bar">
+      <div class="brand" id="storeTitle">Toko Saya</div>
+      <div style="display:flex;gap:8px"><button class="btn secondary" onclick="showStore()">Belanja</button><button
+          class="btn" onclick="openAdmin()">Admin</button></div>
+    </div>
+  </header>
+  <main class="wrap">
+    <section id="storeView">
+      <h1 style="margin:0 0 4px">Katalog Produk</h1>
+      <p class="muted" style="margin-top:0">Pilih barang, masukkan ke keranjang, lalu pilih metode pembayaran.</p>
+      <div class="toolbar"><input id="search" placeholder="Cari nama produk..." oninput="renderProducts()"><button
+          class="btn secondary" onclick="loadProducts()">Muat ulang</button></div>
+      <div class="layout">
+        <div>
+          <div id="productGrid" class="products">
+            <div class="panel">Memuat produk...</div>
+          </div>
+        </div>
+        <aside class="panel">
+          <h2>Keranjang</h2>
+          <div id="cartItems" class="muted">Keranjang masih kosong.</div>
+          <div class="total"><span>Total</span><span id="cartTotal">Rp0</span></div>
+          <label>Nama pembeli (opsional)</label><input id="buyerName" placeholder="Nama pembeli">
+          <label>Metode pembayaran</label><select id="paymentMethod" onchange="paymentChanged()">
+            <option value="Cash">Cash / Tunai</option>
+            <option value="QRIS">QRIS</option>
+          </select>
+          <div id="cashBox"><label>Uang diterima (Rp)</label><input id="cashReceived" type="number" min="0"
+              placeholder="Masukkan uang diterima" oninput="updateChange()">
+            <div class="muted">Kembalian: <b id="change">Rp0</b></div>
+          </div>
+          <button class="btn" style="width:100%;margin-top:14px" onclick="checkout()">Buat transaksi</button>
+          <div id="checkoutMsg"></div>
+        </aside>
+      </div>
+    </section>
+    <section id="adminView" class="hidden">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+        <div>
+          <h1 style="margin:0">Panel Admin</h1>
+          <p class="muted" style="margin:4px 0 12px">Kelola produk, transaksi, dan pengaturan toko.</p>
+        </div><button class="btn secondary" onclick="showStore()">Kembali ke toko</button>
+      </div>
+      <div id="adminLogin" class="panel" style="max-width:420px">
+        <h2>Login Admin</h2><label>Kata sandi admin</label><input id="adminPassword" type="password"
+          autocomplete="current-password" placeholder="Kata sandi"><button class="btn"
+          style="margin-top:12px;width:100%" onclick="loginAdmin()">Masuk</button>
+        <div id="loginMsg"></div>
+      </div>
+      <div id="adminContent" class="hidden">
+        <div class="tabs"><button class="tab active" onclick="adminTab('products',this)">Produk</button><button
+            class="tab" onclick="adminTab('transactions',this)">Transaksi</button><button class="tab"
+            onclick="adminTab('settings',this)">Pengaturan</button><button class="tab"
+            onclick="logoutAdmin()">Keluar</button></div>
+        <div id="admin-products" class="panel">
+          <h2 id="productFormTitle">Tambah Produk</h2><input id="editId" type="hidden">
+          <div class="admin-grid">
+            <div><label>Nama produk *</label><input id="prodName" placeholder="Nama barang"></div>
+            <div><label>Harga (Rp) *</label><input id="prodPrice" type="number" min="0" placeholder="Contoh: 15000">
+            </div>
+            <div><label>Stok *</label><input id="prodStock" type="number" min="0" placeholder="Jumlah stok"></div>
+            <div><label>Kategori</label><input id="prodCategory" placeholder="Contoh: Makanan"></div>
+            <div class="full"><label>Foto produk</label><input id="prodImage" type="file" accept="image/*">
+              <div class="muted">Foto akan disimpan ke Google Drive. Ukuran disarankan maksimal 2 MB.</div>
+            </div>
+            <div class="full"><label>Deskripsi</label><textarea id="prodDescription" rows="2"
+                placeholder="Keterangan produk"></textarea></div>
+            <div><button class="btn" onclick="saveProduct()">Simpan produk</button> <button class="btn secondary"
+                onclick="resetProductForm()">Bersihkan</button></div>
+          </div>
+          <div id="productAdminMsg"></div>
+          <hr style="border:0;border-top:1px solid var(--line);margin:20px 0">
+          <h3>Daftar Produk</h3>
+          <div id="adminProductTable" class="tablewrap"></div>
+        </div>
+        <div id="admin-transactions" class="panel hidden">
+          <h2>Riwayat Transaksi</h2>
+          <div class="toolbar"><input id="txSearch" placeholder="Cari nomor transaksi / pembeli..."
+              oninput="renderTransactions()"><button class="btn secondary" onclick="refreshAdmin()">Muat ulang</button>
+          </div>
+          <div id="txTable" class="tablewrap"></div>
+        </div>
+        <div id="admin-settings" class="panel hidden">
+          <h2>Pengaturan Toko</h2><label>Nama toko</label><input id="settingStoreName"><label>Gambar QRIS (file
+            gambar)</label><input id="qrisFile" type="file" accept="image/*">
+          <p class="muted">Gunakan QRIS resmi milik toko. Gambar disimpan di Google Drive.</p>
+          <div id="qrisPreview"></div><button class="btn" onclick="saveSettings()">Simpan pengaturan</button>
+          <div id="settingsMsg"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div class="footer">Website penjualan terhubung ke Google Sheets melalui Google Apps Script.</div>
+  <div id="modal" class="modal hidden">
+    <div class="modalbox" id="modalContent"></div>
+  </div>
+  <script>
+    /*
+      PENTING: setelah deploy Apps Script sebagai Web App, masukkan URL /exec di bawah.
+      Jangan menaruh password admin atau secret pembayaran di HTML.
+    */
+    const API_URL = "https://script.google.com/macros/s/AKfycbwSTKJlthcuuXxQD5xYsiUfBxLVkMMJC8xSk3T1lMUri10CDRrX8GoQ8o-4E4fdp2NU/exec";
+    let products = [], cart = {}, transactions = [], adminPass = "", settings = { storeName: "Toko Saya", qrisUrl: "" };
+    const rupiah = n => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(Number(n) || 0);
+    const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    function imageUrl(url) {
+      const u = String(url || '').trim(); if (!u) return '';
+      const m = u.match(/[?&]id=([a-zA-Z0-9_-]+)/) || u.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
+      return m ? 'https://drive.google.com/thumbnail?id=' + encodeURIComponent(m[1]) + '&sz=w1000' : u;
+    }
+
+    function api(action, data = {}) {
+      if (!API_URL || API_URL.includes("TEMPEL_URL")) return Promise.reject(new Error("URL Apps Script belum diatur di file HTML."));
+      return fetch(API_URL, { method: "POST", body: JSON.stringify({ action, ...data }), headers: { "Content-Type": "text/plain;charset=utf-8" } })
+        .then(r => r.text()).then(t => { let j; try { j = JSON.parse(t) } catch (e) { throw new Error("Respons server bukan JSON. Periksa deployment Apps Script.") } if (!j.ok) throw new Error(j.error || "Permintaan gagal"); return j });
+    }
+    async function loadProducts() { try { let d = await api("listProducts"); products = d.products || []; settings = d.settings || settings; document.getElementById("storeTitle").textContent = settings.storeName || "Toko Saya"; renderProducts(); renderCart() } catch (e) { document.getElementById("productGrid").innerHTML = '<div class="panel">Belum dapat memuat produk. ' + esc(e.message) + '</div>'; } }
+    function renderProducts() { let q = (document.getElementById("search").value || "").toLowerCase(); let list = products.filter(p => (p.nama + " " + (p.kategori || "")).toLowerCase().includes(q)); document.getElementById("productGrid").innerHTML = list.length ? list.map(p => `<article class="card"><div class="product-img">${p.foto ? `<img loading="lazy" src="${esc(imageUrl(p.foto))}" alt="${esc(p.nama)}">` : "Foto belum tersedia"}</div><div class="pbody"><div class="pname">${esc(p.nama)}</div><div class="price">${rupiah(p.harga)}</div><div class="muted">${esc(p.kategori || "")} · Stok: ${Number(p.stok) || 0}</div>${p.deskripsi ? `<p class="muted">${esc(p.deskripsi)}</p>` : ""}<button class="btn" style="width:100%;margin-top:9px" ${Number(p.stok) <= 0 ? "disabled" : ""} onclick="addCart('${esc(p.id)}')">${Number(p.stok) <= 0 ? "Stok habis" : "Tambah ke keranjang"}</button></div></article>`).join("") : '<div class="panel">Produk tidak ditemukan.</div>' }
+    function addCart(id) { let p = products.find(x => x.id === id); if (!p) return; let count = (cart[id]?.qty || 0) + 1; if (count > Number(p.stok)) { alert("Jumlah melebihi stok tersedia."); return } cart[id] = { product: p, qty: count }; renderCart() }
+    function changeQty(id, delta) { let c = cart[id]; if (!c) return; let n = c.qty + delta; if (n <= 0) delete cart[id]; else if (n > Number(c.product.stok)) { alert("Jumlah melebihi stok."); return } else c.qty = n; renderCart() }
+    function cartTotal() { return Object.values(cart).reduce((s, c) => s + Number(c.product.harga) * c.qty, 0) }
+    function renderCart() { let items = Object.entries(cart); document.getElementById("cartItems").innerHTML = items.length ? items.map(([id, c]) => `<div class="cartrow"><div><b>${esc(c.product.nama)}</b><div class="muted">${rupiah(c.product.harga)} × ${c.qty}</div><div class="qty"><button onclick="changeQty('${esc(id)}',-1)">−</button><span>${c.qty}</span><button onclick="changeQty('${esc(id)}',1)">+</button></div></div><b>${rupiah(c.product.harga * c.qty)}</b></div>`).join("") : 'Keranjang masih kosong.'; document.getElementById("cartTotal").textContent = rupiah(cartTotal()); updateChange() }
+    function updateChange() { let received = Number(document.getElementById("cashReceived").value) || 0; document.getElementById("change").textContent = rupiah(Math.max(0, received - cartTotal())) }
+    function paymentChanged() { document.getElementById("cashBox").classList.toggle("hidden", document.getElementById("paymentMethod").value !== "Cash") }
+    async function checkout() {
+      let items = Object.entries(cart).map(([id, c]) => ({ id, qty: c.qty })); if (!items.length) { alert("Keranjang masih kosong."); return } let method = document.getElementById("paymentMethod").value; let received = Number(document.getElementById("cashReceived").value) || 0; if (method === "Cash" && received < cartTotal()) { alert("Uang diterima belum mencukupi total belanja."); return }
+      let msg = document.getElementById("checkoutMsg"); msg.className = "muted"; msg.textContent = "Menyimpan transaksi...";
+      try { let d = await api("checkout", { items, namaPembeli: document.getElementById("buyerName").value.trim(), metode: method, uangDiterima: method === "Cash" ? received : "" }); cart = {}; renderCart(); await loadProducts(); if (method === "QRIS") { showQrisModal(d.transaksi, d.total, d.qrisUrl || settings.qrisUrl) } else { showReceipt(d.transaksi, d.total, d.kembalian || 0) } msg.textContent = "" } catch (e) { msg.className = "error"; msg.textContent = e.message }
+    }
+    function showReceipt(no, total, change) { document.getElementById("modalContent").innerHTML = `<h2>Transaksi berhasil</h2><p>Nomor: <b>${esc(no)}</b></p><p>Total: <b>${rupiah(total)}</b></p><p>Kembalian: <b>${rupiah(change)}</b></p><p class="muted">Simpan nomor transaksi untuk referensi.</p><button class="btn" onclick="closeModal()">Selesai</button>`; document.getElementById("modal").classList.remove("hidden") }
+    function showQrisModal(no, total, url) { document.getElementById("modalContent").innerHTML = `<h2>Pembayaran QRIS</h2><p>Nomor transaksi: <b>${esc(no)}</b></p><p>Total: <b>${rupiah(total)}</b></p>${url ? `<img class="qris-img" src="${esc(imageUrl(url))}" alt="QRIS toko">` : '<div class="notice">Admin belum mengatur gambar QRIS. Hubungi admin toko.</div>'}<p class="muted">Pindai QRIS melalui aplikasi pembayaran. Transaksi tercatat sebagai menunggu konfirmasi admin.</p><button class="btn secondary" onclick="closeModal()">Tutup</button>`; document.getElementById("modal").classList.remove("hidden") }
+    function closeModal() { document.getElementById("modal").classList.add("hidden") }
+    function showStore() { document.getElementById("storeView").classList.remove("hidden"); document.getElementById("adminView").classList.add("hidden") }
+    function openAdmin() { document.getElementById("storeView").classList.add("hidden"); document.getElementById("adminView").classList.remove("hidden"); document.getElementById("adminLogin").classList.toggle("hidden", !!adminPass); document.getElementById("adminContent").classList.toggle("hidden", !adminPass) }
+    async function loginAdmin() { let p = document.getElementById("adminPassword").value; let m = document.getElementById("loginMsg"); try { await api("adminLogin", { password: p }); adminPass = p; document.getElementById("adminLogin").classList.add("hidden"); document.getElementById("adminContent").classList.remove("hidden"); m.textContent = ""; await refreshAdmin() } catch (e) { m.className = "error"; m.textContent = e.message } }
+    function logoutAdmin() { adminPass = ""; document.getElementById("adminPassword").value = ""; openAdmin() }
+    function adminTab(tab, btn) { document.querySelectorAll(".tabs .tab").forEach(x => x.classList.remove("active")); btn.classList.add("active");["products", "transactions", "settings"].forEach(x => document.getElementById("admin-" + x).classList.toggle("hidden", x !== tab)) }
+    async function adminApi(action, data = {}) { return api(action, { password: adminPass, ...data }) }
+    async function refreshAdmin() { try { let d = await adminApi("adminData"); products = d.products || []; transactions = d.transactions || []; settings = d.settings || settings; renderProducts(); renderCart(); renderAdminProducts(); renderTransactions(); document.getElementById("settingStoreName").value = settings.storeName || "Toko Saya"; document.getElementById("qrisPreview").innerHTML = settings.qrisUrl ? `<img class="qris-img" src="${esc(imageUrl(settings.qrisUrl))}" alt="QRIS tersimpan">` : "<p class='muted'>Belum ada gambar QRIS.</p>" } catch (e) { alert(e.message) } }
+    function renderAdminProducts() {
+      document.getElementById("adminProductTable").innerHTML = `<table><thead><tr><th>Foto</th><th>Produk</th><th>Harga</th><th>Stok</th><th>Aksi</th></tr></thead><tbody>${products.map(p => `<tr><td>${p.foto ? `<img src="${esc(imageUrl(p.foto))}" width="72" height="72"
+style="object-fit:contain;object-position:center;background:#f2f4f7;border-radius:6px;display:block"">` : "—"}</td><td>${esc(p.nama)}</td><td>${rupiah(p.harga)}</td><td>${p.stok}</td><td><button class="btn secondary" onclick="editProduct('${esc(p.id)}')">Edit</button> <button class="btn danger" onclick="deleteProduct('${esc(p.id)}')">Hapus</button></td></tr>`).join("") || '<tr><td colspan="5">Belum ada produk.</td></tr>'}</tbody></table>`
+    }
+    function resetProductForm() { ["editId", "prodName", "prodPrice", "prodStock", "prodCategory", "prodDescription"].forEach(id => document.getElementById(id).value = ""); document.getElementById("prodImage").value = ""; document.getElementById("productFormTitle").textContent = "Tambah Produk" }
+    function editProduct(id) { let p = products.find(x => x.id === id); if (!p) return; document.getElementById("editId").value = p.id; document.getElementById("prodName").value = p.nama; document.getElementById("prodPrice").value = p.harga; document.getElementById("prodStock").value = p.stok; document.getElementById("prodCategory").value = p.kategori || ""; document.getElementById("prodDescription").value = p.deskripsi || ""; document.getElementById("productFormTitle").textContent = "Edit Produk"; window.scrollTo({ top: 0, behavior: "smooth" }) }
+    function fileToData(file) { return new Promise((resolve, reject) => { if (!file) return resolve(null); if (file.size > 2 * 1024 * 1024) return reject(new Error("Ukuran foto maksimal 2 MB.")); let r = new FileReader(); r.onload = () => resolve({ name: file.name, mimeType: file.type, data: String(r.result).split(",")[1] }); r.onerror = reject; r.readAsDataURL(file) }) }
+    async function saveProduct() { let m = document.getElementById("productAdminMsg"); try { let name = document.getElementById("prodName").value.trim(), price = Number(document.getElementById("prodPrice").value), stock = Number(document.getElementById("prodStock").value); if (!name || !Number.isFinite(price) || price < 0 || !Number.isFinite(stock) || stock < 0) throw new Error("Nama, harga, dan stok wajib diisi dengan benar."); let file = await fileToData(document.getElementById("prodImage").files[0]); await adminApi("saveProduct", { product: { id: document.getElementById("editId").value, nama: name, harga: price, stok: stock, kategori: document.getElementById("prodCategory").value.trim(), deskripsi: document.getElementById("prodDescription").value.trim() }, image: file }); m.className = "success"; m.textContent = "Produk tersimpan."; resetProductForm(); await refreshAdmin() } catch (e) { m.className = "error"; m.textContent = e.message } }
+    async function deleteProduct(id) { if (!confirm("Hapus produk ini? Riwayat transaksi tetap disimpan.")) return; try { await adminApi("deleteProduct", { id }); await refreshAdmin() } catch (e) { alert(e.message) } }
+    function renderTransactions() { let q = (document.getElementById("txSearch")?.value || "").toLowerCase(); let list = transactions.filter(t => (t.nomor + " " + t.namaPembeli + " " + t.status + " " + t.metode).toLowerCase().includes(q)); document.getElementById("txTable").innerHTML = `<table><thead><tr><th>Waktu</th><th>Nomor</th><th>Pembeli</th><th>Total</th><th>Metode</th><th>Status</th><th>Aksi</th></tr></thead><tbody>${list.map(t => `<tr><td>${esc(t.waktu)}</td><td>${esc(t.nomor)}</td><td>${esc(t.namaPembeli || "—")}</td><td>${rupiah(t.total)}</td><td>${esc(t.metode)}</td><td><span class="status ${t.status === "Selesai" ? "ok" : t.status === "Batal" ? "bad" : ""}">${esc(t.status)}</span></td><td>${t.status !== "Batal" && t.status !== "Selesai" ? `<button class="btn secondary" onclick="confirmPayment('${esc(t.nomor)}')">Konfirmasi</button> ` : ""}${t.status !== "Batal" ? `<button class="btn danger" onclick="cancelTransaction('${esc(t.nomor)}')">Batalkan</button>` : ""}</td></tr>`).join("") || '<tr><td colspan="7">Belum ada transaksi.</td></tr>'}</tbody></table>` }
+    async function confirmPayment(no) { if (!confirm("Konfirmasi transaksi " + no + " sebagai selesai/dibayar?")) return; try { await adminApi("confirmPayment", { nomor: no }); await refreshAdmin() } catch (e) { alert(e.message) } }
+    async function cancelTransaction(no) { let alasan = prompt("Alasan pembatalan transaksi " + no + ":"); if (alasan === null) return; if (!alasan.trim()) { alert("Alasan pembatalan wajib diisi."); return } try { await adminApi("cancelTransaction", { nomor: no, alasan: alasan.trim() }); await refreshAdmin() } catch (e) { alert(e.message) } }
+    async function saveSettings() { let m = document.getElementById("settingsMsg"); try { let file = await fileToData(document.getElementById("qrisFile").files[0]); await adminApi("saveSettings", { storeName: document.getElementById("settingStoreName").value.trim() || "Toko Saya", qrisImage: file }); m.className = "success"; m.textContent = "Pengaturan tersimpan."; document.getElementById("qrisFile").value = ""; await refreshAdmin() } catch (e) { m.className = "error"; m.textContent = e.message } }
+    loadProducts(); paymentChanged();
+  </script>
+</body>
+
+</html>
